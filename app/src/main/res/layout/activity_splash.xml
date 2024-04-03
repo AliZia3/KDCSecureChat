@@ -21,7 +21,7 @@
         app:srcCompat="@drawable/logo" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/app_name"
         android:layout_width="370dp"
         android:layout_height="99dp"
         android:gravity="center"
