@@ -1,4 +1,4 @@
-package com.example.chatapp.Employee;
+package com.example.chatapp.Frontend.Employee;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.chatapp.R;
-import com.example.chatapp.Supervisor.SupervisorLoginActivity;
+import com.example.chatapp.Frontend.Supervisor.SupervisorLoginActivity;
 
 public class EmployeeLoginActivity extends AppCompatActivity {
 

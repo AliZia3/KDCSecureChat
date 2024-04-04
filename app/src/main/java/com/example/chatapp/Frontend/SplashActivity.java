@@ -1,4 +1,4 @@
-package com.example.chatapp;
+package com.example.chatapp.Frontend;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,7 +11,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.chatapp.Employee.EmployeeLoginActivity;
+import com.example.chatapp.Frontend.Employee.EmployeeLoginActivity;
+import com.example.chatapp.R;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {

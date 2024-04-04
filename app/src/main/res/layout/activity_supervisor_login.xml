@@ -10,7 +10,7 @@
     android:paddingRight="16dp"
     android:paddingBottom="16dp"
     android:background="@color/material_dynamic_primary10"
-    tools:context=".Supervisor.SupervisorLoginActivity">
+    tools:context=".Frontend.Supervisor.SupervisorLoginActivity">
 
     <ImageView
         android:id="@+id/logo"

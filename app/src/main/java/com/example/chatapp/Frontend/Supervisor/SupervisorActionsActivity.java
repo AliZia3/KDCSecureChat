@@ -1,4 +1,4 @@
-package com.example.chatapp.Supervisor;
+package com.example.chatapp.Frontend.Supervisor;
 
 import android.os.Bundle;
 
