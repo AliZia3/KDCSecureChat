@@ -27,6 +27,18 @@ public class SupervisorLoginActivity extends AppCompatActivity {
             return insets;
         });
 
+
+        Button supervisorLoginButton = findViewById(R.id.action_supervisor_login);
+        supervisorLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create an Intent to navigate to SupervisorActionsActivity
+                Intent intent = new Intent(SupervisorLoginActivity.this, SupervisorActionsActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
         Button employeeLoginButton = findViewById(R.id.action_employee_login_redirect);
         employeeLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
