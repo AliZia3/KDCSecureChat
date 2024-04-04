@@ -13,6 +13,10 @@
         android:theme="@style/Theme.ChatApp"
         tools:targetApi="31">
         <activity
+            android:name=".Frontend.MainActivity$NavigationPageActivity"
+            android:exported="false"
+            android:label="@string/title_activity_navigation_page" />
+        <activity
             android:name=".Frontend.Supervisor.SupervisorActionsActivity"
             android:exported="false" />
         <activity
@@ -32,7 +36,7 @@
         </activity>
         <activity
             android:name=".Frontend.MainActivity"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>
