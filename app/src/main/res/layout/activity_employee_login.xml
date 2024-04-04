@@ -74,7 +74,7 @@
         app:layout_constraintVertical_bias="0.06" />
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/action_employee_login"
         android:layout_width="300dp"
         android:layout_height="56dp"
         android:backgroundTint="@color/material_dynamic_secondary20"
@@ -87,7 +87,7 @@
         app:layout_constraintVertical_bias="0.572" />
 
     <Button
-        android:id="@+id/supervisorLogin"
+        android:id="@+id/action_supervisor_login_redirect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/material_dynamic_secondary20"
