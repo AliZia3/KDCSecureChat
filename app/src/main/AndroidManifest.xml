@@ -13,27 +13,26 @@
         android:theme="@style/Theme.ChatApp"
         tools:targetApi="31">
         <activity
-            android:name=".Supervisor.SupervisorLoginActivity"
+            android:name=".Frontend.Supervisor.SupervisorActionsActivity"
             android:exported="false" />
         <activity
-            android:name=".Employee.EmployeeLoginActivity"
+            android:name=".Frontend.Supervisor.SupervisorLoginActivity"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
-            android:exported="true" >
-
+            android:name=".Frontend.Employee.EmployeeLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Frontend.SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".MainActivity"
-            android:exported="false">
-
-        </activity>
+            android:name=".Frontend.MainActivity"
+            android:exported="false"></activity>
     </application>
 
 </manifest>

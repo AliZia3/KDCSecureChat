@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/material_dynamic_primary10"
-    tools:context=".SplashActivity">
+    tools:context=".Frontend.SplashActivity">
 
     <ImageView
         android:id="@+id/logo"
@@ -21,7 +21,7 @@
         app:srcCompat="@drawable/logo" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/app_name"
         android:layout_width="370dp"
         android:layout_height="99dp"
         android:gravity="center"

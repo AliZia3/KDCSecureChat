@@ -10,7 +10,7 @@
     android:paddingRight="16dp"
     android:paddingBottom="16dp"
     android:background="@color/material_dynamic_primary10"
-    tools:context=".Employee.EmployeeLoginActivity">
+    tools:context=".Frontend.Employee.EmployeeLoginActivity">
 
     <ImageView
         android:id="@+id/logo"
@@ -38,38 +38,43 @@
         app:layout_constraintVertical_bias="0.211" />
 
     <EditText
-        android:id="@+id/username"
-        android:layout_width="0dp"
+        android:id="@+id/employee_ID"
+        android:layout_width="300sp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="224dp"
         android:backgroundTint="@color/white"
-        android:hint="ID"
+        android:ems="10"
+        android:inputType="text"
         android:selectAllOnFocus="true"
-        android:textColorHint="@color/white"
+        android:hint="ID"
         android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.328" />
 
     <EditText
-        android:id="@+id/password"
-        android:layout_width="0dp"
+        android:id="@+id/employee_password"
+        android:layout_width="300sp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:hint="Password"
-        android:imeOptions="actionDone"
-        android:inputType="textPassword"
-        android:textColorHint="@color/white"
-        android:selectAllOnFocus="true"
         android:backgroundTint="@color/white"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:selectAllOnFocus="true"
         android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/employee_ID"
+        app:layout_constraintVertical_bias="0.06" />
 
     <Button
-        android:id="@+id/login"
+        android:id="@+id/action_employee_login"
         android:layout_width="300dp"
         android:layout_height="56dp"
         android:backgroundTint="@color/material_dynamic_secondary20"
@@ -82,11 +87,11 @@
         app:layout_constraintVertical_bias="0.572" />
 
     <Button
-        android:id="@+id/supervisorLogin"
+        android:id="@+id/action_supervisor_login_redirect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/material_dynamic_secondary20"
-        android:text="Supervisor Login >>"
+        android:text="Supervisor Login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
