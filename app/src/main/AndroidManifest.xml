@@ -13,20 +13,13 @@
         android:theme="@style/Theme.ChatApp"
         tools:targetApi="31">
         <activity
-            android:name=".Frontend.MainActivity$NavigationPageActivity"
-            android:exported="false"
-            android:label="@string/title_activity_navigation_page" />
-        <activity
-            android:name=".Frontend.Supervisor.SupervisorActionsActivity"
+            android:name=".Frontend.MessageActivity"
             android:exported="false" />
         <activity
-            android:name=".Frontend.Supervisor.SupervisorLoginActivity"
+            android:name=".Frontend.MessageListActivity"
             android:exported="false" />
         <activity
-            android:name=".Frontend.Employee.EmployeeLoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Frontend.SplashActivity"
+            android:name=".Frontend.MainPageActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +28,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Frontend.MainActivity"
+            android:name=".Frontend.SplashActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Frontend.Supervisor.SupervisorActionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Frontend.Supervisor.SupervisorLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Frontend.Employee.EmployeeLoginActivity"
             android:exported="false" />
     </application>
 
