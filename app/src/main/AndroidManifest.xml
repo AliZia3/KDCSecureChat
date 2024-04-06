@@ -12,10 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChatApp"
         tools:targetApi="31">
-        <activity
-            android:name=".Frontend.MainActivity$NavigationPageActivity"
-            android:exported="false"
-            android:label="@string/title_activity_navigation_page" />
+
         <activity
             android:name=".Frontend.Supervisor.SupervisorActionsActivity"
             android:exported="false" />
@@ -35,8 +32,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Frontend.MainActivity"
+            android:name=".Frontend.Message.MessageActivity"
             android:exported="false" />
+        <activity
+            android:name=".Frontend.Message.MessageListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Frontend.MainPageActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>
+
