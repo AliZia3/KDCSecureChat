@@ -28,8 +28,8 @@
             android:name=".Frontend.Employee.EmployeeLoginActivity"
             android:exported="false" />
         <activity
-            android:name=".Frontend.SplashActivity"
-            android:exported="true">
+            android:name=".Frontend.MainPageActivity"
+            android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -37,7 +37,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Frontend.MainPageActivity"
+            android:name=".Frontend.SplashActivity"
+            android:exported="true"/>
+        <activity
+            android:name=".Frontend.Message.MessageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Frontend.Message.MessageListActivity"
             android:exported="false" />
     </application>
 
