@@ -1,7 +1,10 @@
+//https://www.youtube.com/watch?v=M8sKwoVjqU0
 package com.example.chatapp.Frontend;
 
 public class Users {
     String name, password, email, position, department;
+
+    public Users(){}
 
     public Users(String name, String email, String password, String position, String department){
         this.name = name;

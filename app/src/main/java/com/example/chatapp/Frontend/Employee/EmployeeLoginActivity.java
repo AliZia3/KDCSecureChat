@@ -1,6 +1,7 @@
 package com.example.chatapp.Frontend.Employee;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -44,7 +45,6 @@ public class EmployeeLoginActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
 
         auth = FirebaseAuth.getInstance();
         loginButton = findViewById(R.id.action_employee_login);
