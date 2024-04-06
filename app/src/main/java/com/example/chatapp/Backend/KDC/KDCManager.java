@@ -11,14 +11,14 @@ public class KDCManager extends KDCManagement {
     }
 
     Key createKey() {
-        return null;
+        return generateKey.generateKey();
     }
 
     boolean deleteKey(Key key) {
-        return false;
+        return keyDeleter.deleteKey(key);
     }
 
     boolean distributeKeys(UUID[] targets, Key key) {
-        return false;
+        return keyDistributor.distributeKey(targets,key);
     }
 }
