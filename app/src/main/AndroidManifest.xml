@@ -12,6 +12,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChatApp"
         tools:targetApi="31">
+
+        <activity
+            android:name=".Frontend.Supervisor.SupervisorActionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Frontend.Supervisor.SupervisorLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Frontend.Employee.EmployeeLoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Frontend.SplashActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".Frontend.Message.MessageActivity"
             android:exported="false" />
@@ -21,25 +40,7 @@
         <activity
             android:name=".Frontend.MainPageActivity"
             android:exported="true"/>
-
-        <activity
-            android:name=".Frontend.SplashActivity"
-            android:exported="true" />
-        <activity
-            android:name=".Frontend.Supervisor.SupervisorActionsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Frontend.Supervisor.SupervisorLoginActivity"
-            android:exported="false" />
-        <activity
-            android:name=".Frontend.Employee.EmployeeLoginActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
+
