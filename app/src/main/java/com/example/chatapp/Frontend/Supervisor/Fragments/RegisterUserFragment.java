@@ -25,7 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class RegisterUserFragment extends Fragment {
     TextInputEditText register_name, register_password, register_email, register_position, register_department;
-    Button registerUserButton, logoutButton;
+    Button registerUserButton, clearTextButton, logoutButton;
     FirebaseAuth auth;
     FirebaseDatabase database;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
@@ -36,6 +36,7 @@ public class RegisterUserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_register_user, container, false);
 
         registerUserButton = view.findViewById(R.id.action_register_employee);
+        clearTextButton = view.findViewById(R.id.action_clear_text);
         logoutButton = view.findViewById(R.id.action_logout);
         register_name = view.findViewById(R.id.register_employeeName);
         register_password = view.findViewById(R.id.register_employeePassword);
@@ -60,8 +61,8 @@ public class RegisterUserFragment extends Fragment {
                     Toast.makeText(getContext(), "Enter valid information", Toast.LENGTH_SHORT).show();
                 } else if (!email.matches(emailPattern)){
                     register_email.setError("Incorrect Email Address Form");
-                } else if (password.length()<5){
-                    register_password.setError("Password must be >= 5 characters");
+                } else if (password.length()<6){
+                    register_password.setError("Password must be >= 6 characters");
                 } else {
                     auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -70,7 +71,7 @@ public class RegisterUserFragment extends Fragment {
                                 String id = task.getResult().getUser().getUid();
                                 DatabaseReference reference = database.getReference().child("user").child(id);
 
-                                Users users = new Users(name, email, password, position, department);
+                                Users users = new Users(id, name, email, password, position, department);
                                 reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -87,6 +88,18 @@ public class RegisterUserFragment extends Fragment {
                         }
                     });
                 }
+            }
+        });
+
+
+        clearTextButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                register_name.setText("");
+                register_password.setText("");
+                register_email.setText("");
+                register_position.setText("");
+                register_department.setText("");
             }
         });
 

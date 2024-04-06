@@ -27,7 +27,7 @@ import java.util.Objects;
 
 public class SupervisorLoginActivity extends AppCompatActivity {
 
-    String supervisorEmailLoginKey = "admin@gmail.com";
+    String supervisorEmailLoginKey = "admin@fake.com";
     String supervisorPasswordLoginKey = "123456";
     Button loginButton, employeeLoginRedirectButton ;
     EditText supervisorEmail, password;
@@ -62,7 +62,7 @@ public class SupervisorLoginActivity extends AppCompatActivity {
                     Toast.makeText(SupervisorLoginActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
                 } else if (!email.matches(emailPattern)){
                     supervisorEmail.setError("Incorrect Email Address Form");
-                } else if (password.length()<5){
+                } else if (password.length()<6){
                     password.setError("More Then 5 Characters");
                     Toast.makeText(SupervisorLoginActivity.this, "Incorrect Password Length", Toast.LENGTH_SHORT).show();
                 } else {
