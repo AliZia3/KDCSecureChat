@@ -39,6 +39,7 @@ public class EditUserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_user, container, false);
 
         editUserRecyclerView = view.findViewById(R.id.edit_user_recycler_view);
+        logoutButton = view.findViewById(R.id.action_logout);
         database=FirebaseDatabase.getInstance().getReference("user");
         editUserRecyclerView.setHasFixedSize(true);
         editUserRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
