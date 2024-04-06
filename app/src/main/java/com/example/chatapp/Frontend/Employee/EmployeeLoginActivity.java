@@ -17,7 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.chatapp.Frontend.MainActivity;
+import com.example.chatapp.Frontend.MainPageActivity;
 import com.example.chatapp.R;
 import com.example.chatapp.Frontend.Supervisor.SupervisorLoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -71,7 +71,7 @@ public class EmployeeLoginActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
                                 try {
-                                    Intent intent = new Intent(EmployeeLoginActivity.this , MainActivity.class);
+                                    Intent intent = new Intent(EmployeeLoginActivity.this , MainPageActivity.class);
                                     startActivity(intent);
                                     finish();
                                 }catch (Exception e){

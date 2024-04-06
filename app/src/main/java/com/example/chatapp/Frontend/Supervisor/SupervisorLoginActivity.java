@@ -16,7 +16,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.chatapp.Frontend.Employee.EmployeeLoginActivity;
-import com.example.chatapp.Frontend.MainActivity;
+import com.example.chatapp.Frontend.MainPageActivity;
 import com.example.chatapp.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
