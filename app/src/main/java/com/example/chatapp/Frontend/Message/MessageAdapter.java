@@ -1,4 +1,4 @@
-package com.example.chatapp.Frontend;
+package com.example.chatapp.Frontend.Message;
 
 
 import android.view.LayoutInflater;

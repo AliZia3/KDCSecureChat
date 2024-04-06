@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Frontend.MessageListActivity">
+    tools:context=".Frontend.Message.MessageListActivity">
 
     <ListView
         android:id="@+id/friends_list"

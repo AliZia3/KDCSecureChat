@@ -13,20 +13,15 @@
         android:theme="@style/Theme.ChatApp"
         tools:targetApi="31">
         <activity
-            android:name=".Frontend.MessageActivity"
+            android:name=".Frontend.Message.MessageActivity"
             android:exported="false" />
         <activity
-            android:name=".Frontend.MessageListActivity"
+            android:name=".Frontend.Message.MessageListActivity"
             android:exported="false" />
         <activity
             android:name=".Frontend.MainPageActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="true"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".Frontend.SplashActivity"
             android:exported="true" />
@@ -38,7 +33,13 @@
             android:exported="false" />
         <activity
             android:name=".Frontend.Employee.EmployeeLoginActivity"
-            android:exported="false" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
