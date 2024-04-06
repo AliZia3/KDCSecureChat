@@ -32,14 +32,12 @@ public class EditUserFragment extends Fragment {
     DatabaseReference database;
     UserAdapter adapter;
     ArrayList<Users> usersArrayList;
-    Button logoutButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_user, container, false);
 
         editUserRecyclerView = view.findViewById(R.id.edit_user_recycler_view);
-        logoutButton = view.findViewById(R.id.action_logout);
         database=FirebaseDatabase.getInstance().getReference("user");
         editUserRecyclerView.setHasFixedSize(true);
         editUserRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -52,6 +50,7 @@ public class EditUserFragment extends Fragment {
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                usersArrayList.clear();
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()){
                     Users user = dataSnapshot.getValue(Users.class);
                     usersArrayList.add(user);
@@ -62,17 +61,6 @@ public class EditUserFragment extends Fragment {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-
-
-        logoutButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(view.getContext(), SupervisorLoginActivity.class);
-                startActivity(intent);
-                getActivity().finish();
             }
         });
 
