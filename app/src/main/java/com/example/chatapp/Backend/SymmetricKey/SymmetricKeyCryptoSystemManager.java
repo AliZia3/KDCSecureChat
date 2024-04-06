@@ -1,23 +1,26 @@
 package com.example.chatapp.Backend.SymmetricKey;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
 
 public class SymmetricKeyCryptoSystemManager extends SymmetricKeyCryptoSystemManagement{
     public SymmetricKeyCryptoSystemManager() {
         encrypt = new Encrypt();
         decrypt = new Decrypt();
-        verifyKey = new VerifyKey();
     }
 
-    Boolean verifyKey(Key key) {
-        return verifyKey.verifyKey(key);
+    byte[] encrypt(String message, Key key, IvParameterSpec iv) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        return encrypt.encrypt(message, key, iv);
     }
 
-    String encrypt(Key key) {
-        return encrypt.encrypt(key);
-    }
-
-    String decrypt(Key key) {
-        return decrypt.decrypt(key);
+    String decrypt(byte[] encryptedMessage, Key key, IvParameterSpec iv) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+        return decrypt.decrypt(encryptedMessage, key, iv);
     }
 }
