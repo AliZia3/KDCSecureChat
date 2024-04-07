@@ -20,10 +20,10 @@ public class SendTextMessage {
         UUID messageId = UUID.randomUUID();
 
         // Simple way to generate a chat ID
-        final String[] chatId = {senderId.toString() + "-" + receiverId.toString()};
+        final String[] chatId = {senderId.toString() + ":" + receiverId.toString()};
 
         // Check to see if a chat already exists between two users
-        String reversedChatId = receiverId + "-" + senderId;
+        String reversedChatId = receiverId + ":" + senderId;
 
         chatsRef.child(reversedChatId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

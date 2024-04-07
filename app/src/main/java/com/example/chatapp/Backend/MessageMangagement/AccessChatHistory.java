@@ -20,7 +20,7 @@ public class AccessChatHistory {
 
     // Returns all data regarding chats and messages
     public ChatHistory accessChatHistory(UUID senderId, UUID receiverId, final ChatHistoryListener listener) {
-        String chatId = senderId.toString() + "-" + receiverId.toString(); // Simple chat ID generation logic
+        String chatId = senderId.toString() + ":" + receiverId.toString(); // Simple chat ID generation logic
 
         chatsRef.child(chatId).child("messages").addValueEventListener(new ValueEventListener() {
             @Override
@@ -49,7 +49,7 @@ public class AccessChatHistory {
     }
 
     public void accessMessages(UUID senderId, UUID receiverId, final MessagesListener listener) {
-        String chatId = senderId.toString() + "-" + receiverId.toString(); // Simple chat ID generation logic
+        String chatId = senderId.toString() + ":" + receiverId.toString(); // Simple chat ID generation logic
 
         chatsRef.child(chatId).child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -81,7 +81,7 @@ public class AccessChatHistory {
 
     // New simplified method to get just the messages as a list of strings
     public void getRawMessages(UUID senderId, UUID receiverId, final RawMessagesListener listener) {
-        String chatId = senderId.toString() + "-" + receiverId.toString(); // Simple chat ID generation logic
+        String chatId = senderId.toString() + ":" + receiverId.toString(); // Simple chat ID generation logic
 
         chatsRef.child(chatId).child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
