@@ -8,7 +8,6 @@ import java.security.NoSuchAlgorithmException;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.IvParameterSpec;
 
 public class SymmetricKeyCryptoSystemManager extends SymmetricKeyCryptoSystemManagement{
     public SymmetricKeyCryptoSystemManager() {
