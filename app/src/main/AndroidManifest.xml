@@ -43,7 +43,7 @@
             android:name=".Frontend.Message.MessageActivity"
             android:exported="false" />
         <activity
-            android:name=".Frontend.Message.MessageListActivity"
+            android:name=".Frontend.Message.MessageListFragment"
             android:exported="false" />
     </application>
 

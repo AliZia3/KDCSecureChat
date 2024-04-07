@@ -34,7 +34,6 @@ public class EmployeeLoginActivity extends AppCompatActivity {
     EditText employeeEmail, password;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
