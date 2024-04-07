@@ -8,12 +8,12 @@ public class MessageManager extends MessageManagement {
         accessChatHistory = new AccessChatHistory();
         startChat = new StartChat();
     }
-    void sendTextMessage(UUID uid) {
-        sendTextMessage.sendTextMessage(uid);
+    void sendTextMessage(UUID senderId, UUID receiverId, String message) {
+        sendTextMessage.sendTextMessage(senderId, receiverId, message);
     }
 
-    ChatHistory retrieveChatHistory(UUID sender, UUID receiver) {
-        return accessChatHistory.accessChatHistory(sender, receiver);
+    ChatHistory retrieveChatHistory(UUID sender, UUID receiver, final AccessChatHistory.ChatHistoryListener listener) {
+        return accessChatHistory.accessChatHistory(sender, receiver, listener);
     }
 
     void startChat(UUID uid) {
