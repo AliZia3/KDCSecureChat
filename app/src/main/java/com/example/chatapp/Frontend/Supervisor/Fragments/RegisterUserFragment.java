@@ -30,7 +30,7 @@ public class RegisterUserFragment extends Fragment {
     FirebaseDatabase database;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
-//    https://www.youtube.com/watch?v=QAKq8UBv4GI
+    // Source (for some of the logic): https://www.youtube.com/watch?v=QAKq8UBv4GI
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register_user, container, false);
@@ -112,7 +112,7 @@ public class RegisterUserFragment extends Fragment {
             }
         });
 
-        // Set OnClickListener for logoutButton to log out user and navigate to SupervisorLoginActivity
+        // Set OnClickListener for logoutButton to log out user and navigate back to SupervisorLoginActivity
         logoutButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {

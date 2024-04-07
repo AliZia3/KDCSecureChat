@@ -32,6 +32,7 @@ public class SupervisorLoginActivity extends AppCompatActivity {
     String supervisorPasswordLoginKey = "123456";
     Button loginButton, employeeLoginRedirectButton ;
     EditText supervisorEmail, password;
+    // Email pattern from google
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
 

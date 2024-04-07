@@ -28,6 +28,7 @@ public class SplashActivity extends AppCompatActivity {
             return insets;
         });
 
+        // used to delay to show the splash screen for 4 sec
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

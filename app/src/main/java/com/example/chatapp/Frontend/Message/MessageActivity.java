@@ -31,11 +31,19 @@ public class MessageActivity extends AppCompatActivity {
         Button sendButton = findViewById(R.id.sendButton);
 
         Intent i = getIntent();
-        String name = i.getStringExtra("Receiver_NAME");
+        String receiverName = i.getStringExtra("Receiver_NAME");
+        String receiverId = i.getStringExtra("Receiver_ID");
         System.out.println("==========================================================================");
-        System.out.println(name);
-        // Assuming you have a method to get previous messages for the chat
-        loadPreviousMessages(name);
+        System.out.println(receiverName);
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String senderID = auth.getCurrentUser().getUid();
+        String senderName = auth.getCurrentUser().getDisplayName();
+        System.out.println(senderName);
+        System.out.println(senderID);
+        System.out.println("+_=-=--=-=-=-=-=-=-=-=");
+        // Getting previous messages for the chat
+        loadPreviousMessages(senderID,receiverName);
+
 
         messageAdapter = new MessageAdapter(messageList);
         messagesRecyclerView.setAdapter(messageAdapter);
@@ -43,20 +51,17 @@ public class MessageActivity extends AppCompatActivity {
         sendButton.setOnClickListener(v -> {
             String message = messageEditText.getText().toString();
             if (!message.isEmpty()) {
-//                FirebaseAuth auth = FirebaseAuth.getInstance();
-//                String senderID = auth.getCurrentUser().getUid();
-
-                saveMessages(message);
+                saveMessages(message,senderID,receiverId);
                 // Add new message to list and notify adapter
 //                messageList.add(message);
-//                messageAdapter.notifyItemInserted(messageList.size() - 1);
-//                messageEditText.setText("");
-//                messagesRecyclerView.scrollToPosition(messageList.size() - 1); // Scroll to bottom
+                messageAdapter.notifyItemInserted(messageList.size() - 1);
+                messageEditText.setText("");
+                messagesRecyclerView.scrollToPosition(messageList.size() - 1); // Scroll to bottom
             }
         });
     }
 
-    private void loadPreviousMessages(String name) {
+    private void loadPreviousMessages(String senderID, String receiverID) {
         // Dummy data, replace with actual message loading logic
         String[][] strings =  {
                 {"Jake","Hello"},
@@ -69,15 +74,20 @@ public class MessageActivity extends AppCompatActivity {
 
         for (String[] s:strings){
             System.out.println(s[0]);
-            System.out.println(name);
-            if (s[0].equals(name)){
+            System.out.println(receiverID);
+            if (s[0].equals(receiverID)){
                 messageList.add(s[1]);
             }
         }
+
     }
 
-    private void saveMessages(String message) {
+    private void saveMessages(String message, String senderID, String receiverID) {
         messageList.add(message);
+        System.out.println(message);
+        System.out.println(senderID);
+        System.out.println(receiverID);
+        System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
 //        messageAdapter.notifyItemInserted(messageList.size() - 1);
 //        messagesRecyclerView.scrollToPosition(messageList.size() - 1); // Scroll to bottom
     }

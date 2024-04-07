@@ -70,9 +70,9 @@ public class MessageListFragment extends Fragment implements UserListAdapter.OnU
         Intent intent = new Intent(getActivity(), MessageActivity.class);
         System.out.println("=====================================================+++++++++++++++++++");
         System.out.println(user.getName().toString());
-//        System.out.println(user.().toString());
+        System.out.println(user.getUserId().toString());
         intent.putExtra("Receiver_NAME", user.getName().toString());
-        intent.putExtra("Receiver_ID", user.getName().toString());
+        intent.putExtra("Receiver_ID", user.getUserId().toString());
         startActivity(intent);
     }
 }
