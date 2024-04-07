@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "ChatApp"
 include(":app")
- 
+include("recyclerView-clink")

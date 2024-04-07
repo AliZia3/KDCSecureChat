@@ -27,7 +27,8 @@ import java.util.Objects;
 
 public class SupervisorLoginActivity extends AppCompatActivity {
 
-    String supervisorEmailLoginKey = "admin@gmail.com";
+    // Supervisor login credentials
+    String supervisorEmailLoginKey = "admin@fake.com";
     String supervisorPasswordLoginKey = "123456";
     Button loginButton, employeeLoginRedirectButton ;
     EditText supervisorEmail, password;
@@ -50,22 +51,26 @@ public class SupervisorLoginActivity extends AppCompatActivity {
         supervisorEmail = findViewById(R.id.login_supervisorEmail);
         password = findViewById(R.id.login_supervisorPassword);
 
+        // Set OnClickListener for the login button
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Retrieve email and password entered by user
                 String email = supervisorEmail.getText().toString();
                 String pass = password.getText().toString();
 
+                // Validate email and password
                 if ((TextUtils.isEmpty(email))){
                     Toast.makeText(SupervisorLoginActivity.this, "Enter Email", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(pass)){
                     Toast.makeText(SupervisorLoginActivity.this, "Enter Password", Toast.LENGTH_SHORT).show();
                 } else if (!email.matches(emailPattern)){
                     supervisorEmail.setError("Incorrect Email Address Form");
-                } else if (password.length()<5){
+                } else if (password.length()<6){
                     password.setError("More Then 5 Characters");
                     Toast.makeText(SupervisorLoginActivity.this, "Incorrect Password Length", Toast.LENGTH_SHORT).show();
                 } else {
+                    // Check if the entered credentials match the supervisor login credentials
                     if (email.equals(supervisorEmailLoginKey) && pass.equals(supervisorPasswordLoginKey)) {
                         // Credentials are correct, navigate to the next page
                         try {

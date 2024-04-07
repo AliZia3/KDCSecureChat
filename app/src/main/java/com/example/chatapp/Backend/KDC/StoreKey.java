@@ -6,18 +6,21 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.security.Key;
+import java.util.Arrays;
+import java.util.UUID;
 
-public class DeleteKey {
+public class StoreKey {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    public boolean deleteKey(Key key) {
-        // Keys are stored in serialized form, so we need to serialize the key to delete it
+    public boolean storeKey(Key key) {
+        // AES Keys are unique, so we can use the key itself as the ID after serializing it
+
+        // Serialization
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         try {
@@ -31,24 +34,20 @@ public class DeleteKey {
         String serializedKey = bos.toString();
 
 
-        // Querying the database to find the key
+        // Adding to db
         DatabaseReference reference = database.getReference().child("KDC");
 
-        Query query = reference.orderByValue().equalTo(serializedKey);
-
-        // Deleting the key
-        final boolean[] deleted = {false};
-
-        query.getRef().removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+        final boolean[] stored = {false};
+        reference.setValue(serializedKey).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
-                    deleted[0] = true;
+                    stored[0] = true;
                     System.out.println("Key stored successfully"); //TODO: temp
                 }
             }
         });
 
-        return deleted[0];
+        return stored[0];
     }
 }

@@ -6,9 +6,9 @@ import java.util.UUID;
 abstract class KDCManagement {
     CreateKeys generateKey;
     DeleteKey keyDeleter;
-    DistributeKeys keyDistributor;
+    StoreKey keyStorer;
 
     abstract Key createKey();
     abstract boolean deleteKey(Key key);
-    abstract boolean distributeKeys(UUID[] targets, Key key);
+    abstract boolean storeKey(Key key);
 }

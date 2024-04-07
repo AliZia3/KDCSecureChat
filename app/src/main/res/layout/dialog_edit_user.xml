@@ -1,0 +1,63 @@
+<!-- dialog_edit_user.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/material_dynamic_primary10"
+    >
+
+    <EditText
+        android:id="@+id/popupEditTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Name"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/popupEditTextPosition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Position"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/popupEditTextDepartment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Department"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/popupEditTextEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/popupEditTextPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:inputType="text" />
+
+
+    <Button
+        android:id="@+id/action_update_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        android:backgroundTint="@color/material_dynamic_secondary20"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout>
