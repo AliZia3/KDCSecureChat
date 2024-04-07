@@ -34,8 +34,8 @@ public class MainPageActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        System.out.println("==================================================");
-        System.out.println(auth.getCurrentUser().getUid());
+//        System.out.println("==================================================");
+//        System.out.println(auth.getCurrentUser().getUid());
     }
 
     public void launchMessageList(View view){
