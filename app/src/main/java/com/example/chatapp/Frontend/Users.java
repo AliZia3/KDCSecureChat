@@ -1,10 +1,12 @@
 //https://www.youtube.com/watch?v=M8sKwoVjqU0
 package com.example.chatapp.Frontend;
 
+
 import androidx.annotation.NonNull;
 
 public class Users {
     String userId, name, password, email, position, department;
+
 
     public Users(){}
 

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.chatapp.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,17 +31,21 @@ public class MessageActivity extends AppCompatActivity {
         Button sendButton = findViewById(R.id.sendButton);
 
         Intent i = getIntent();
-        String name = i.getStringExtra("FRIEND_NAME");
+        String name = i.getStringExtra("Receiver_NAME");
+        System.out.println("==========================================================================");
+        System.out.println(name);
         // Assuming you have a method to get previous messages for the chat
         loadPreviousMessages(name);
 
         messageAdapter = new MessageAdapter(messageList);
         messagesRecyclerView.setAdapter(messageAdapter);
         messagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         sendButton.setOnClickListener(v -> {
             String message = messageEditText.getText().toString();
             if (!message.isEmpty()) {
+//                FirebaseAuth auth = FirebaseAuth.getInstance();
+//                String senderID = auth.getCurrentUser().getUid();
+
                 saveMessages(message);
                 // Add new message to list and notify adapter
 //                messageList.add(message);
@@ -54,12 +59,12 @@ public class MessageActivity extends AppCompatActivity {
     private void loadPreviousMessages(String name) {
         // Dummy data, replace with actual message loading logic
         String[][] strings =  {
-                {"Alice","Hello"},
-                {"Bob","What's up"},
-                {"Charlie","Hi, how are you?"},
-                {"Alice","Hi, how are you?"},
-                {"Frank","I'm good, thanks for asking."},
-                {"Bob","Come on"},
+                {"Jake","Hello"},
+                {"Ali","What's up"},
+                {"Will","Hi, how are you?"},
+                {"Changhao","Hi, how are you?"},
+                {"Ali","I'm good, thanks for asking."},
+                {"Matthew","Come on"},
         };
 
         for (String[] s:strings){
@@ -76,4 +81,5 @@ public class MessageActivity extends AppCompatActivity {
 //        messageAdapter.notifyItemInserted(messageList.size() - 1);
 //        messagesRecyclerView.scrollToPosition(messageList.size() - 1); // Scroll to bottom
     }
+
 }
