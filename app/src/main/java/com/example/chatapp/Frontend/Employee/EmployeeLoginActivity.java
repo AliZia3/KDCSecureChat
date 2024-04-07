@@ -45,17 +45,21 @@ public class EmployeeLoginActivity extends AppCompatActivity {
             return insets;
         });
 
+//        init firebase auth instance
         auth = FirebaseAuth.getInstance();
+//        init ui elements
         loginButton = findViewById(R.id.action_employee_login);
         employeeEmail = findViewById(R.id.login_employeeEmail);
         password = findViewById(R.id.login_employeePassword);
-
+// Set OnClickListener for the login button
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // get email and password entered by the user
                 String email = employeeEmail.getText().toString();
                 String pass = password.getText().toString();
 
+                // Validate email and password
                 if ((TextUtils.isEmpty(email))){
                     Toast.makeText(EmployeeLoginActivity.this, "Enter Email", Toast.LENGTH_SHORT).show();
                 } else if (TextUtils.isEmpty(pass)){
@@ -65,10 +69,12 @@ public class EmployeeLoginActivity extends AppCompatActivity {
                 } else if (password.length()<5){
                     password.setError("Password >=5 Character");
                 } else {
+                    // Authenticate user with Firebase
                     auth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
+                                // Navigate to main page if auth successful
                                 try {
                                     Intent intent = new Intent(EmployeeLoginActivity.this , MainPageActivity.class);
                                     startActivity(intent);

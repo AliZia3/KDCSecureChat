@@ -34,9 +34,11 @@ public class EditUserFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflate layout review alr provided when created
         View view = inflater.inflate(R.layout.fragment_edit_user, container, false);
 
         editUserRecyclerView = view.findViewById(R.id.edit_user_recycler_view);
+        // Get ref to firebase database
         database=FirebaseDatabase.getInstance().getReference("user");
         editUserRecyclerView.setHasFixedSize(true);
         editUserRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -46,14 +48,18 @@ public class EditUserFragment extends Fragment {
         adapter = new UserAdapter(getContext(), usersArrayList);
         editUserRecyclerView.setAdapter(adapter);
 
+        // Add ValueEventListener to fetch data from firebase
         database.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                // Clear the list to prevent duplications
                 usersArrayList.clear();
+                // Iterate through each child node in the snapshot (shown in firebase docs)
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()){
                     Users user = dataSnapshot.getValue(Users.class);
                     usersArrayList.add(user);
                 }
+                // Notify adapter the data has chagnged
                 adapter.notifyDataSetChanged();
             }
 
