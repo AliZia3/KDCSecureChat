@@ -36,43 +36,15 @@ public class SendTextMessage {
 
         generateChatId generate = new generateChatId();
 
+        AccessChatHistory accessChatHistory = new AccessChatHistory();
+
         String[] chatId = generate.generate(senderId, receiverId);
-
-        final String[] serializedKey = new String[1];
-
-        chatsRef.child(chatId[0]).child("key").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                serializedKey[0] = dataSnapshot.getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("Failed to read chat messages: " + databaseError.getMessage()); // Print error
-            }
-        });
-
-
-
-        byte[] bytes = serializedKey[0].getBytes();
-
-        // Deserialize
-        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-        Key deserializedKey = null;
-        try {
-            ObjectInputStream in = new ObjectInputStream(bis);
-            deserializedKey = (Key) in.readObject();
-
-            // Use deserializedKey as needed
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
 
 
         SymmetricKeyCryptoSystemManager encrypt = new SymmetricKeyCryptoSystemManager();
 
         // Create a new ChatMessage object
-        ChatMessage chatMessage = new ChatMessage(messageId, senderId, encrypt.encrypt(message, deserializedKey));
+        ChatMessage chatMessage = new ChatMessage(messageId, senderId, encrypt.encrypt(message, accessChatHistory.fetchAndDecryptMessages(chatId)));
 
         // Serialization for ChatMessage object
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -94,4 +66,5 @@ public class SendTextMessage {
         chatsRef.child(chatId[0]).child("messages").child(serializedChatMessage).push().setValue(senderId);
         //TODO: update chat metadata (sender, receiver, etc.) here as well (maybe)
     }
+
 }
