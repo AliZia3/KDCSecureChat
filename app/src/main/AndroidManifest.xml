@@ -28,6 +28,9 @@
             android:name=".Frontend.Employee.EmployeeLoginActivity"
             android:exported="false" />
         <activity
+            android:name=".Frontend.MainPageActivity"
+            android:exported="true" />
+        <activity
             android:name=".Frontend.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -37,7 +40,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Frontend.MainPageActivity"
+            android:name=".Frontend.Message.MessageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Frontend.Message.MessageListFragment"
             android:exported="false" />
     </application>
 
