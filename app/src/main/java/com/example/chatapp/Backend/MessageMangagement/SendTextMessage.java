@@ -2,49 +2,79 @@ package com.example.chatapp.Backend.MessageMangagement;
 
 import androidx.annotation.NonNull;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
+import com.example.chatapp.Backend.SymmetricKey.Encrypt;
+import com.example.chatapp.Backend.SymmetricKey.SymmetricKeyCryptoSystemManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+
 public class SendTextMessage {
     private final DatabaseReference chatsRef = FirebaseDatabase.getInstance().getReference("Chats");
 
-    public void sendTextMessage(UUID senderId, UUID receiverId, String message) {
+    public void sendTextMessage(UUID senderId, UUID receiverId, String message) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 
         UUID messageId = UUID.randomUUID();
 
-        // Simple way to generate a chat ID
-        final String[] chatId = {senderId.toString() + ":" + receiverId.toString()};
+        generateChatId generate = new generateChatId();
 
-        // Check to see if a chat already exists between two users
-        String reversedChatId = receiverId + ":" + senderId;
+        String[] chatId = generate.generate(senderId, receiverId);
 
-        chatsRef.child(reversedChatId).addListenerForSingleValueEvent(new ValueEventListener() {
+        final String[] serializedKey = new String[1];
+
+        chatsRef.child(chatId[0]).child("key").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // If the chat already exists, set chatId to the existing one
-                if (snapshot.exists()) {
-                    chatId[0] = reversedChatId;
-                }
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                serializedKey[0] = dataSnapshot.getValue(String.class);
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // Cancelled logic }
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Failed to read chat messages: " + databaseError.getMessage()); // Print error
             }
         });
 
 
-        // Create a new ChatMessage object
-        ChatMessage chatMessage = new ChatMessage(messageId, senderId, message);
 
-        // Serialization
+        byte[] bytes = serializedKey[0].getBytes();
+
+        // Deserialize
+        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+        Key deserializedKey = null;
+        try {
+            ObjectInputStream in = new ObjectInputStream(bis);
+            deserializedKey = (Key) in.readObject();
+
+            // Use deserializedKey as needed
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+        SymmetricKeyCryptoSystemManager encrypt = new SymmetricKeyCryptoSystemManager();
+
+        // Create a new ChatMessage object
+        ChatMessage chatMessage = new ChatMessage(messageId, senderId, encrypt.encrypt(message, deserializedKey));
+
+        // Serialization for ChatMessage object
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
         try {

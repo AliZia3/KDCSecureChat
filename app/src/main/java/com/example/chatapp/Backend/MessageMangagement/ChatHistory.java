@@ -10,7 +10,7 @@ import java.util.List;
 public class ChatHistory {
     private UUID sender;
     private UUID receiver;
-    private Key key; // Placeholder attribute
+    private Key key;
     private List<ChatMessage> messages;
 
     public UUID getSender() {

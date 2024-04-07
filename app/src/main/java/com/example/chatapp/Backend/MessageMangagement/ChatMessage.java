@@ -8,7 +8,7 @@ import java.util.UUID;
 public class ChatMessage implements Serializable {
     private UUID messageId;
     private UUID senderId;
-    private String message;
+    private byte[] message;
     private Date date;
 
     public UUID getMessageId() {
@@ -19,7 +19,7 @@ public class ChatMessage implements Serializable {
         this.messageId = messageId;
     }
 
-    public String getMessage() {
+    public byte[] getMessage() {
         return message;
     }
 
@@ -31,7 +31,7 @@ public class ChatMessage implements Serializable {
         this.senderId = senderId;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(byte[] message) {
         this.message = message;
     }
 
@@ -44,7 +44,7 @@ public class ChatMessage implements Serializable {
     }
 
     // Constructors, getters, and setters
-    public ChatMessage(UUID messageId, UUID senderId, String message) {
+    public ChatMessage(UUID messageId, UUID senderId, byte[] message) {
         this.messageId = messageId;
         this.senderId = senderId;
         this.message = message;

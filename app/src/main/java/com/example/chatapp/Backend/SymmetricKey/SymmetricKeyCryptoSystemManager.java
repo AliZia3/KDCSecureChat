@@ -17,11 +17,11 @@ public class SymmetricKeyCryptoSystemManager extends SymmetricKeyCryptoSystemMan
         iv = IVGen.generateIV();
     }
 
-    byte[] encrypt(String message, Key key) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public byte[] encrypt(String message, Key key) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         return encrypt.encrypt(message, key, iv);
     }
 
-    String decrypt(byte[] encryptedMessage, Key key) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+    public String decrypt(byte[] encryptedMessage, Key key) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         return decrypt.decrypt(encryptedMessage, key, iv);
     }
 }

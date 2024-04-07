@@ -1,7 +1,14 @@
 package com.example.chatapp.Backend.MessageMangagement;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.Key;
+import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class MessageManager extends MessageManagement {
     public MessageManager() {
@@ -9,7 +16,7 @@ public class MessageManager extends MessageManagement {
         accessChatHistory = new AccessChatHistory();
         startChat = new StartChat();
     }
-    void sendTextMessage(UUID senderId, UUID receiverId, String message) {
+    void sendTextMessage(UUID senderId, UUID receiverId, String message) throws InvalidAlgorithmParameterException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
         sendTextMessage.sendTextMessage(senderId, receiverId, message);
     }
 
