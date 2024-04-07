@@ -10,7 +10,7 @@ public class KDCManager extends KDCManagement {
         keyStorer = new StoreKey();
     }
 
-    Key createKey() { // TODO Called when a chat starts
+    public Key createKey() { // TODO Called when a chat starts
         Key key = generateKey.generateKey();
         storeKey(key);
         return key;

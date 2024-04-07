@@ -1,11 +1,13 @@
 package com.example.chatapp.Backend.MessageMangagement;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import java.util.UUID;
 
-public class ChatMessage {
+public class ChatMessage implements Serializable {
     private UUID messageId;
+    private UUID senderId;
     private String message;
     private Date date;
 
@@ -21,6 +23,14 @@ public class ChatMessage {
         return message;
     }
 
+    public UUID getSenderId() {
+        return senderId;
+    }
+
+    public void setSenderId(UUID senderId) {
+        this.senderId = senderId;
+    }
+
     public void setMessage(String message) {
         this.message = message;
     }
@@ -34,8 +44,9 @@ public class ChatMessage {
     }
 
     // Constructors, getters, and setters
-    public ChatMessage(UUID messageId, String message) {
+    public ChatMessage(UUID messageId, UUID senderId, String message) {
         this.messageId = messageId;
+        this.senderId = senderId;
         this.message = message;
         this.date = new Date(); // The date the message was created
     }

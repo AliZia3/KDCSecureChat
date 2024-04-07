@@ -1,5 +1,6 @@
 package com.example.chatapp.Backend.MessageMangagement;
 
+import java.security.Key;
 import java.util.UUID;
 
 public class MessageManager extends MessageManagement {
@@ -16,7 +17,7 @@ public class MessageManager extends MessageManagement {
         return accessChatHistory.accessChatHistory(sender, receiver, listener);
     }
 
-    void startChat(UUID uid) {
-        startChat.startChat(uid);
+    boolean startChat(UUID senderId, UUID receiverId) {
+        return startChat.startChat(senderId, receiverId);
     }
 }
