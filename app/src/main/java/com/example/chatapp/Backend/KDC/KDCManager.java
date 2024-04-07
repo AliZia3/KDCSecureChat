@@ -7,18 +7,20 @@ public class KDCManager extends KDCManagement {
     public KDCManager() {
         generateKey = new CreateKeys();
         keyDeleter = new DeleteKey();
-        keyDistributor = new DistributeKeys();
+        keyStorer = new StoreKey();
     }
 
-    Key createKey() {
-        return generateKey.generateKey();
+    Key createKey() { // TODO Called when a chat starts
+        Key key = generateKey.generateKey();
+        storeKey(key);
+        return key;
     }
 
-    boolean deleteKey(Key key) {
+    boolean deleteKey(Key key) { // TODO Called when a chat ends
         return keyDeleter.deleteKey(key);
     }
 
-    boolean distributeKeys(UUID[] targets, Key key) {
-        return keyDistributor.distributeKey(targets,key);
+    boolean storeKey(Key key) {
+        return keyStorer.storeKey(key);
     }
 }
