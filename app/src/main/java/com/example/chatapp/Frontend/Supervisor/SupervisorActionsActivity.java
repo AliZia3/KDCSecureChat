@@ -44,7 +44,7 @@ public class SupervisorActionsActivity extends AppCompatActivity {
                 viewPager.setCurrentItem(tab.getPosition());
             }
 
-            // Automatically created these 2 methods as well but wtv dont need em
+            // Automatically created these 2 methods as well but wtv dont need em (have them because the thing goes red)
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
 
@@ -61,7 +61,7 @@ public class SupervisorActionsActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 // when a page is selected in the ViewPager2, select the corresponding tab in the TabLayout
-                // Did the Objects.requireNull but itself for some reason
+                // Did the Objects.requireNull by itself for some reason
                 Objects.requireNonNull(tabLayout.getTabAt(position)).select();
             }
         });

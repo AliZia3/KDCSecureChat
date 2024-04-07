@@ -32,6 +32,7 @@ public class EmployeeLoginActivity extends AppCompatActivity {
     FirebaseAuth auth;
     Button loginButton, supervisorLoginRedirectButton;
     EditText employeeEmail, password;
+    // Email pattern from google
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
 
@@ -46,13 +47,15 @@ public class EmployeeLoginActivity extends AppCompatActivity {
             return insets;
         });
 
-//        init firebase auth instance
+        // init firebase auth instance
         auth = FirebaseAuth.getInstance();
-//        init ui elements
+        // init ui elements
         loginButton = findViewById(R.id.action_employee_login);
+        supervisorLoginRedirectButton = findViewById(R.id.action_supervisor_login_redirect);
         employeeEmail = findViewById(R.id.login_employeeEmail);
         password = findViewById(R.id.login_employeePassword);
-// Set OnClickListener for the login button
+
+        // Set OnClickListener for the login button thats on the UI
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,6 +87,7 @@ public class EmployeeLoginActivity extends AppCompatActivity {
                                     Toast.makeText(EmployeeLoginActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }else {
+                                // Error toast if task not successufl
                                 Toast.makeText(EmployeeLoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -93,7 +97,6 @@ public class EmployeeLoginActivity extends AppCompatActivity {
         });
 
         // Redirect to Supervisor login screen
-        supervisorLoginRedirectButton = findViewById(R.id.action_supervisor_login_redirect);
         supervisorLoginRedirectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

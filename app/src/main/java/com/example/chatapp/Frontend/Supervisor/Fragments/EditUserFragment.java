@@ -55,7 +55,7 @@ public class EditUserFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 // Clear the list to prevent duplications
                 usersArrayList.clear();
-                // Iterate through each child node in the snapshot (shown in firebase docs)
+                // Iterate through each child node in the snapshot (as done in firebase docs)
                 for (DataSnapshot dataSnapshot: snapshot.getChildren()){
                     Users user = dataSnapshot.getValue(Users.class);
                     usersArrayList.add(user);

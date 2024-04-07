@@ -16,16 +16,20 @@ public class SupervisorActionsPagerAdapter extends FragmentStateAdapter {
         super(fragmentActivity);
     }
 
+    // create new fragment based on position in viewpager
     @NonNull
     @Override
     public Fragment createFragment(int position) {
         if (position == 1) {
+            // return an instance of EditUserFragment
             return new EditUserFragment();
         }
+        // return an instance of RegisterUserFragment
         return new RegisterUserFragment();
 
     }
 
+    // #items in viewpager
     @Override
     public int getItemCount() {
         return 2;
