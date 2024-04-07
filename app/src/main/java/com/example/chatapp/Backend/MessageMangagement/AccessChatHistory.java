@@ -1,12 +1,6 @@
 package com.example.chatapp.Backend.MessageMangagement;
 
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
 import com.example.chatapp.Backend.SymmetricKey.SymmetricKeyCryptoSystemManager;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -21,6 +15,7 @@ import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,10 +24,11 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class AccessChatHistory {
-    DatabaseReference chatsRef = FirebaseDatabase.getInstance().getReference("Chats");
+    private final DatabaseReference chatsRef = FirebaseDatabase.getInstance().getReference("Chats");
 
     public interface ChatHistoryListener {
         void onChatHistoryReceived(List<ChatMessage> messages);
+
         void onError(String error);
     }
 
@@ -65,6 +61,7 @@ public class AccessChatHistory {
     // Simplified getter which only returns senderId and the message
     public interface MessagesListener {
         void onAccessMessagesReceived(List<SimpleChatMessage> simpleMessages);
+
         void onError(String error);
     }
 
@@ -98,6 +95,7 @@ public class AccessChatHistory {
     // Most simplified getter that only returns a list of all messages, regardless of sender
     public interface RawMessagesListener {
         void onRawMessagesReceived(List<String> messages);
+
         void onError(String error);
     }
 
@@ -106,70 +104,32 @@ public class AccessChatHistory {
         generateChatId generate = new generateChatId();
 
         String[] chatId = generate.generate(senderId, receiverId);
-
-        final String[] serializedKey = new String[1];
-
-        DatabaseReference chatsRef = FirebaseDatabase.getInstance().getReference("Chats");
-
-
-// Asynchronously retrieve the data once.
-        Task<DataSnapshot> task = chatsRef.child(chatId[0]).child("key").get();
-
-        task.addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DataSnapshot dataSnapshot = task.getResult();
-                    // Check if the key exists
-                    if (dataSnapshot.exists()) {
-                        // Assuming the key is stored as a String
-                        String keyValue = dataSnapshot.child("key").getValue(String.class);
-                        Log.d("asdfasdf","Retrieved key: " + keyValue);
-                    } else {
-                        Log.d(";lkj;lkj","Key not found.");
-                    }
-                } else {
-                    Log.d("zxcv","Error getting data: " + task.getException().getMessage());
-                }
-            }
-        });
-
-
-
-        // Assume serializedKey is your serialized key in String format
-        assert serializedKey[0] != null;
-        byte[] bytes = serializedKey[0].getBytes();
-
-        // Deserialize
-        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-        Key deserializedKey = null;
-        try {
-            ObjectInputStream in = new ObjectInputStream(bis);
-            deserializedKey = (Key) in.readObject();
-
-            // Use deserializedKey as needed
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        Key finalDeserializedKey = deserializedKey;
         chatsRef.child(chatId[0]).child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 List<String> messages = new ArrayList<>();
                 for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                    // Extracting the message field directly from each message
-                    byte[] message = {messageSnapshot.child("message").getValue(byte.class)};
+                    // Assuming the messages are stored as Base64 encoded strings
+                    String encodedMessage = messageSnapshot.child("message").getValue(String.class);
+                    if (encodedMessage != null) {
+                        // Decode the Base64 encoded message
+                        byte[] decodedBytes = new byte[0];
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            decodedBytes = Base64.getDecoder().decode(encodedMessage);
+                        }
 
-                    SymmetricKeyCryptoSystemManager decrypt = new SymmetricKeyCryptoSystemManager();
-
-                    try {
-                        messages.add(decrypt.decrypt(message, finalDeserializedKey));
-                    } catch (InvalidAlgorithmParameterException | InvalidKeyException |
-                             BadPaddingException | NoSuchAlgorithmException |
-                             IllegalBlockSizeException | NoSuchPaddingException e) {
-                        throw new RuntimeException(e);
+                        SymmetricKeyCryptoSystemManager decrypt = new SymmetricKeyCryptoSystemManager();
+                        try {
+                            // Assuming decrypt method returns a String after decryption
+                            messages.add(decrypt.decrypt(decodedBytes, fetchAndDecryptMessages(chatId, listener)));
+                        } catch (InvalidAlgorithmParameterException | InvalidKeyException |
+                                 BadPaddingException | NoSuchAlgorithmException |
+                                 IllegalBlockSizeException | NoSuchPaddingException e) {
+                            e.printStackTrace();
+                            listener.onError("Failed to decrypt message: " + e.getMessage());
+                            return;
+                        }
                     }
                 }
                 listener.onRawMessagesReceived(messages); // Pass the list of messages to the listener
@@ -181,8 +141,44 @@ public class AccessChatHistory {
             }
         });
     }
-}
 
+    private Key fetchAndDecryptMessages(String[] chatId, final RawMessagesListener listener) {
+        final String[] serializedKey = new String[1];
+        final Key[] finalDeserializedKey = new Key[1];
+        chatsRef.child(chatId[0]).child("key").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                serializedKey[0] = dataSnapshot.getValue(String.class);
+
+
+                // Assume serializedKey is your serialized key in String format
+                assert serializedKey[0] != null;
+                byte[] bytes = serializedKey[0].getBytes();
+
+                // Deserialize
+                ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+                Key deserializedKey = null;
+                try {
+                    ObjectInputStream in = new ObjectInputStream(bis);
+                    deserializedKey = (Key) in.readObject();
+
+                    // Use deserializedKey as needed
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                finalDeserializedKey[0] = deserializedKey;
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("Failed to read chat messages: " + databaseError.getMessage()); // Print error
+            }
+        });
+        return finalDeserializedKey[0];
+    }
+}
 
 class SimpleChatMessage {
     private String senderId;
@@ -202,4 +198,9 @@ class SimpleChatMessage {
         return message;
     }
 }
+
+
+
+
+
 
