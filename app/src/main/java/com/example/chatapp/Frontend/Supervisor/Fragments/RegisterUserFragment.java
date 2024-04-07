@@ -35,6 +35,7 @@ public class RegisterUserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_register_user, container, false);
 
+        // Init ui elements
         registerUserButton = view.findViewById(R.id.action_register_employee);
         clearTextButton = view.findViewById(R.id.action_clear_text);
         logoutButton = view.findViewById(R.id.action_logout);
@@ -47,16 +48,18 @@ public class RegisterUserFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
 
-
+        // Set OnClickListener for registerUserButton
         registerUserButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Retrieve user input
                 String name = register_name.getText().toString();
                 String password = register_password.getText().toString();
                 String email = register_email.getText().toString();
                 String position = register_position.getText().toString();
                 String department = register_department.getText().toString();
 
+                // Validate user input
                 if (TextUtils.isEmpty(name) || TextUtils.isEmpty(password) || TextUtils.isEmpty(email) || TextUtils.isEmpty(position) || TextUtils.isEmpty(department)){
                     Toast.makeText(getContext(), "Enter valid information", Toast.LENGTH_SHORT).show();
                 } else if (!email.matches(emailPattern)){
@@ -64,14 +67,19 @@ public class RegisterUserFragment extends Fragment {
                 } else if (password.length()<6){
                     register_password.setError("Password must be >= 6 characters");
                 } else {
+                    // Create user account in firebase auth (https://www.youtube.com/watch?v=QAKq8UBv4GI)
                     auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
+                                // If account creation is successful, save user details in firebase realtime database
                                 String id = task.getResult().getUser().getUid();
                                 DatabaseReference reference = database.getReference().child("user").child(id);
 
+                                // Create new user object with user details
                                 Users users = new Users(id, name, email, password, position, department);
+
+                                // Set the val of the user node in the database with the Users object
                                 reference.setValue(users).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
@@ -82,7 +90,8 @@ public class RegisterUserFragment extends Fragment {
                                         }
                                     }
                                 });
-                            }else {
+                            } else {
+                                // Display error message if accoutn creation fails
                                 Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -91,7 +100,7 @@ public class RegisterUserFragment extends Fragment {
             }
         });
 
-
+        // Set OnClickListener for clearTextButton to clear input fields
         clearTextButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
@@ -103,6 +112,7 @@ public class RegisterUserFragment extends Fragment {
             }
         });
 
+        // Set OnClickListener for logoutButton to log out user and navigate to SupervisorLoginActivity
         logoutButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
