@@ -143,13 +143,10 @@ public class AccessChatHistory {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         List<String> messages = new ArrayList<>();
-                        for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                            String encodedMessage = messageSnapshot.child("message").getValue(String.class);
-                            if (encodedMessage != null) {
-                                byte[] decodedBytes = new byte[0];
-                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                    decodedBytes = Base64.getDecoder().decode(encodedMessage);
-                                }
+                        for (DataSnapshot messageSnapshot : dataSnapshot.child("messages").getChildren()) {
+                            String encodedMessage = messageSnapshot.getValue(String.class); // Get the message content directly
+                            if (encodedMessage != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                byte[] decodedBytes = Base64.getDecoder().decode(encodedMessage);
                                 SymmetricKeyCryptoSystemManager decrypt = new SymmetricKeyCryptoSystemManager();
                                 try {
                                     messages.add(decrypt.decrypt(decodedBytes, key));
