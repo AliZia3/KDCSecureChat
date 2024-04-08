@@ -15,6 +15,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
 
 import java.util.List;
@@ -144,17 +145,21 @@ public class AccessChatHistory {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         List<String> messages = new ArrayList<>();
                         for (DataSnapshot messageSnapshot : dataSnapshot.child("messages").getChildren()) {
-                            String encodedMessage = messageSnapshot.getValue(String.class); // Get the message content directly
-                            if (encodedMessage != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                byte[] decodedBytes = Base64.getDecoder().decode(encodedMessage);
-                                SymmetricKeyCryptoSystemManager decrypt = new SymmetricKeyCryptoSystemManager();
+                            String serializedChatMessage = messageSnapshot.getValue(String.class);
+                            if (serializedChatMessage != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                byte[] serializedChatMessageBytes = Base64.getDecoder().decode(serializedChatMessage);
                                 try {
-                                    messages.add(decrypt.decrypt(decodedBytes, key));
-                                } catch (InvalidAlgorithmParameterException | InvalidKeyException |
-                                         BadPaddingException | NoSuchAlgorithmException |
-                                         IllegalBlockSizeException | NoSuchPaddingException e) {
+                                    ByteArrayInputStream bis = new ByteArrayInputStream(serializedChatMessageBytes);
+                                    ObjectInputStream ois = new ObjectInputStream(bis);
+                                    ChatMessage chatMessage = (ChatMessage) ois.readObject();
+
+                                    // Do what you need with chatMessage here, e.g., get its text content
+                                    // Let's say your ChatMessage class has a getText() method to get the message text
+                                    messages.add(Arrays.toString(chatMessage.getMessage()));
+
+                                } catch (IOException | ClassNotFoundException e) {
                                     e.printStackTrace();
-                                    listener.onError("Failed to decrypt message: " + e.getMessage());
+                                    listener.onError("Failed to deserialize message: " + e.getMessage());
                                     return;
                                 }
                             }
