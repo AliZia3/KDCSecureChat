@@ -2,7 +2,6 @@ package com.example.chatapp.Backend.SymmetricKey;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.BadPaddingException;

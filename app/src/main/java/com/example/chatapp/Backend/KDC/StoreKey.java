@@ -9,9 +9,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
-import java.security.Key;
-import java.util.Arrays;
-import java.util.UUID;
 
 import javax.crypto.SecretKey;
 

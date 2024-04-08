@@ -1,16 +1,17 @@
 package com.example.chatapp.Backend.MessageMangagement;
 
-import java.security.Key;
 import java.util.UUID;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.SecretKey;
+
 
 public class ChatHistory {
     private UUID sender;
     private UUID receiver;
-    private Key key;
+    private SecretKey key;
     private List<ChatMessage> messages;
 
     public UUID getSender() {
@@ -29,11 +30,11 @@ public class ChatHistory {
         this.receiver = receiver;
     }
 
-    public Key getKey() {
+    public SecretKey getKey() {
         return key;
     }
 
-    public void setKey(Key key) {
+    public void setKey(SecretKey key) {
         this.key = key;
     }
 
@@ -45,7 +46,7 @@ public class ChatHistory {
         this.messages = messages;
     }
 
-    public ChatHistory(UUID sender, UUID receiver, Key key) {
+    public ChatHistory(UUID sender, UUID receiver, SecretKey key) {
         this.sender = sender;
         this.receiver = receiver;
         this.key = key;

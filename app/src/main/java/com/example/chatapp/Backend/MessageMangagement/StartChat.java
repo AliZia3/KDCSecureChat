@@ -10,8 +10,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
-import java.security.Key;
 import java.util.UUID;
+
+import javax.crypto.SecretKey;
 
 public class StartChat {
 
@@ -27,7 +28,7 @@ public class StartChat {
 
         // Calling createKey to generate a new key for this chat
         KDCManager kdc = new KDCManager();
-        Key keyGenerated = kdc.createKey();
+        SecretKey keyGenerated = kdc.createKey();
 
         // Serialization
         ByteArrayOutputStream bos = new ByteArrayOutputStream();

@@ -1,6 +1,5 @@
 package com.example.chatapp.Backend.KDC;
 
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 
 import javax.crypto.KeyGenerator;
