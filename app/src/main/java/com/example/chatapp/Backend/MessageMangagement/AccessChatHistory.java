@@ -16,12 +16,14 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Base64;
+
 import java.util.List;
 import java.util.UUID;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 
 public class AccessChatHistory {
     private final DatabaseReference chatsRef = FirebaseDatabase.getInstance().getReference("Chats");
@@ -122,7 +124,7 @@ public class AccessChatHistory {
                         SymmetricKeyCryptoSystemManager decrypt = new SymmetricKeyCryptoSystemManager();
                         try {
                             // Assuming decrypt method returns a String after decryption
-                            messages.add(decrypt.decrypt(decodedBytes, fetchAndDecryptMessages(chatId, listener)));
+                            messages.add(decrypt.decrypt(decodedBytes, fetchAndDecryptMessages(chatId)));
                         } catch (InvalidAlgorithmParameterException | InvalidKeyException |
                                  BadPaddingException | NoSuchAlgorithmException |
                                  IllegalBlockSizeException | NoSuchPaddingException e) {
@@ -142,7 +144,7 @@ public class AccessChatHistory {
         });
     }
 
-    private Key fetchAndDecryptMessages(String[] chatId, final RawMessagesListener listener) {
+    public Key fetchAndDecryptMessages(String[] chatId) {
         final String[] serializedKey = new String[1];
         final Key[] finalDeserializedKey = new Key[1];
         chatsRef.child(chatId[0]).child("key").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -150,17 +152,16 @@ public class AccessChatHistory {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 serializedKey[0] = dataSnapshot.getValue(String.class);
 
-
                 // Assume serializedKey is your serialized key in String format
                 assert serializedKey[0] != null;
                 byte[] bytes = serializedKey[0].getBytes();
 
                 // Deserialize
                 ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-                Key deserializedKey = null;
+                SecretKey deserializedKey = null;
                 try {
                     ObjectInputStream in = new ObjectInputStream(bis);
-                    deserializedKey = (Key) in.readObject();
+                    deserializedKey = (SecretKey) in.readObject();
 
                     // Use deserializedKey as needed
                 } catch (IOException | ClassNotFoundException e) {

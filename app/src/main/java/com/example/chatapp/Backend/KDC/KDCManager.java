@@ -3,6 +3,8 @@ package com.example.chatapp.Backend.KDC;
 import java.security.Key;
 import java.util.UUID;
 
+import javax.crypto.SecretKey;
+
 public class KDCManager extends KDCManagement {
     public KDCManager() {
         generateKey = new CreateKeys();
@@ -10,17 +12,17 @@ public class KDCManager extends KDCManagement {
         keyStorer = new StoreKey();
     }
 
-    public Key createKey() { // TODO Called when a chat starts
-        Key key = generateKey.generateKey();
+    public SecretKey createKey() { // TODO Called when a chat starts
+        SecretKey key = generateKey.generateKey();
         storeKey(key);
         return key;
     }
 
-    boolean deleteKey(Key key) { // TODO Called when a chat ends
+    boolean deleteKey(SecretKey key) { // TODO Called when a chat ends
         return keyDeleter.deleteKey(key);
     }
 
-    boolean storeKey(Key key) {
+    boolean storeKey(SecretKey key) {
         return keyStorer.storeKey(key);
     }
 }

@@ -12,11 +12,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.security.Key;
 
+import javax.crypto.SecretKey;
+
 public class DeleteKey {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    public boolean deleteKey(Key key) {
+    public boolean deleteKey(SecretKey key) {
         // Keys are stored in serialized form, so we need to serialize the key to delete it
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
 

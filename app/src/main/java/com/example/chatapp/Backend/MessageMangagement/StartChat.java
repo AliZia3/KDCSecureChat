@@ -42,6 +42,8 @@ public class StartChat {
 
         String serializedKey = bos.toString();
 
+
+        // Pushes key to database
         final boolean[] stored = {false};
         chatRef.child("key").setValue(serializedKey).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

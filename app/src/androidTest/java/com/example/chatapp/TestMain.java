@@ -60,5 +60,6 @@ public class TestMain {
 
         // Wait for Firebase to respond
         latch.await(10, TimeUnit.SECONDS);
+
     }
 }

@@ -7,7 +7,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
 public class CreateKeys {
-    public Key generateKey() {
+    public SecretKey generateKey() {
         try {
             // Initialize the KeyGenerator
             KeyGenerator keyGen = KeyGenerator.getInstance("AES");
