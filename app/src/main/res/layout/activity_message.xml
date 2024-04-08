@@ -5,7 +5,6 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/material_dynamic_primary10"
     tools:context=".Frontend.Message.MessageActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -26,8 +25,7 @@
         android:hint="Write a message"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        android:textColor="@color/white"
-        android:textColorHint="@color/white"
+
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
