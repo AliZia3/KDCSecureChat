@@ -13,11 +13,13 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.UUID;
 
+import javax.crypto.SecretKey;
+
 public class StoreKey {
 
     FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    public boolean storeKey(Key key) {
+    public boolean storeKey(SecretKey key) {
         // AES Keys are unique, so we can use the key itself as the ID after serializing it
 
         // Serialization
