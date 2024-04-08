@@ -9,6 +9,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 
+// Symmetric Key Crypto System Manager that is able to encrypt and decrypt messages
+// Does this using Encrypt, Decrypt and GenerateIV classes
 public class SymmetricKeyCryptoSystemManager extends SymmetricKeyCryptoSystemManagement{
     public SymmetricKeyCryptoSystemManager() {
         encrypt = new Encrypt();

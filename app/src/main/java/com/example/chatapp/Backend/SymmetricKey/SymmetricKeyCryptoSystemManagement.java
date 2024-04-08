@@ -10,6 +10,8 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 
+// Abstracted class to manage Symmetric Key Crypto System
+// Does this using the encrypt, decrypt and GenerateIV classes
 abstract class SymmetricKeyCryptoSystemManagement {
     Decrypt decrypt;
     Encrypt encrypt;
