@@ -42,4 +42,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             messageTextView = itemView.findViewById(android.R.id.text1);
         }
     }
+    public void setMessages(List<String> messages) {
+        this.messages = messages;
+        notifyDataSetChanged();
+    }
 }

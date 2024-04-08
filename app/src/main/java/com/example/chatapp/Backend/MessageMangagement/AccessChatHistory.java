@@ -16,6 +16,7 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -122,7 +123,7 @@ public class AccessChatHistory {
                         SymmetricKeyCryptoSystemManager decrypt = new SymmetricKeyCryptoSystemManager();
                         try {
                             // Assuming decrypt method returns a String after decryption
-                            messages.add(decrypt.decrypt(decodedBytes, fetchAndDecryptMessages(chatId, listener)));
+                            messages.add(decrypt.decrypt(decodedBytes, fetchAndDecryptMessages(chatId)));
                         } catch (InvalidAlgorithmParameterException | InvalidKeyException |
                                  BadPaddingException | NoSuchAlgorithmException |
                                  IllegalBlockSizeException | NoSuchPaddingException e) {
@@ -142,14 +143,13 @@ public class AccessChatHistory {
         });
     }
 
-    private Key fetchAndDecryptMessages(String[] chatId, final RawMessagesListener listener) {
+    public Key fetchAndDecryptMessages(String[] chatId) {
         final String[] serializedKey = new String[1];
         final Key[] finalDeserializedKey = new Key[1];
         chatsRef.child(chatId[0]).child("key").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 serializedKey[0] = dataSnapshot.getValue(String.class);
-
 
                 // Assume serializedKey is your serialized key in String format
                 assert serializedKey[0] != null;
