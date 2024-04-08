@@ -144,9 +144,9 @@ public class AccessChatHistory {
         });
     }
 
-    public Key fetchAndDecryptMessages(String[] chatId) {
+    public SecretKey fetchAndDecryptMessages(String[] chatId) {
         final String[] serializedKey = new String[1];
-        final Key[] finalDeserializedKey = new Key[1];
+        final SecretKey[] finalDeserializedKey = new SecretKey[1];
         chatsRef.child(chatId[0]).child("key").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
