@@ -23,4 +23,8 @@ public class KDCManager extends KDCManagement {
     boolean storeKey(SecretKey key) {
         return keyStorer.storeKey(key);
     }
+
+    void updateKeys() {
+        keyUpdater.updateKeys();
+    }
 }

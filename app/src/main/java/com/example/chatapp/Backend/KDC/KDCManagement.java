@@ -8,7 +8,11 @@ abstract class KDCManagement {
     DeleteKey keyDeleter;
     StoreKey keyStorer;
 
+    UpdateKeys keyUpdater;
+
     abstract SecretKey createKey();
     abstract boolean deleteKey(SecretKey key);
     abstract boolean storeKey(SecretKey key);
+
+    abstract void updateKeys();
 }
