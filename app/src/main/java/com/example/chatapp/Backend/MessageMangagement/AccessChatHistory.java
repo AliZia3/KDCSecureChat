@@ -163,7 +163,11 @@ public class AccessChatHistory {
                 String serializedKey = dataSnapshot.getValue(String.class);
                 if (serializedKey != null) {
                     try {
-                        byte[] bytes = serializedKey.getBytes(StandardCharsets.ISO_8859_1);
+                        // Decode the Base64 encoded key string to bytes
+                        byte[] bytes = new byte[0];
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            bytes = Base64.getDecoder().decode(serializedKey);
+                        }
                         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                         ObjectInputStream in = new ObjectInputStream(bis);
                         SecretKey deserializedKey = (SecretKey) in.readObject();

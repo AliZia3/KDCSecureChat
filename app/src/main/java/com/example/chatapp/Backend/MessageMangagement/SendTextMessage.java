@@ -1,5 +1,7 @@
 package com.example.chatapp.Backend.MessageMangagement;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 
 import java.io.ByteArrayInputStream;
@@ -10,6 +12,7 @@ import java.io.ObjectOutputStream;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.UUID;
 
 import com.example.chatapp.Backend.SymmetricKey.Encrypt;
@@ -54,16 +57,20 @@ public class SendTextMessage {
 
                     // Serialization for ChatMessage object
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    String serializedChatMessage = null;
 
                     try {
                         ObjectOutputStream out = new ObjectOutputStream(bos);
                         out.writeObject(chatMessage);
                         out.flush();
+                        // Properly encode the byte array to a Base64 string
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            serializedChatMessage = Base64.getEncoder().encodeToString(bos.toByteArray());
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
 
-                    String serializedChatMessage = bos.toString();
 
                     // Push this message to the correct chat in Firebase
                     chatsRef.child(chatId[0]).child("messages").push().setValue(serializedChatMessage);

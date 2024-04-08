@@ -1,5 +1,7 @@
 package com.example.chatapp.Backend.MessageMangagement;
 
+import android.os.Build;
+
 import androidx.annotation.NonNull;
 
 import com.example.chatapp.Backend.KDC.KDCManager;
@@ -10,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.Base64;
 import java.util.UUID;
 
 import javax.crypto.SecretKey;
@@ -32,16 +35,20 @@ public class StartChat {
 
         // Serialization
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        String serializedKey = null;
 
         try {
             ObjectOutputStream out = new ObjectOutputStream(bos);
             out.writeObject(keyGenerated);
             out.flush();
+            // Properly encode the byte array to a Base64 string
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                serializedKey = Base64.getEncoder().encodeToString(bos.toByteArray());
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        String serializedKey = bos.toString();
 
 
         // Pushes key to database
