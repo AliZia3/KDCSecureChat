@@ -24,6 +24,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 public class AccessChatHistory {
     private final DatabaseReference chatsRef = FirebaseDatabase.getInstance().getReference("Chats");
@@ -162,20 +163,15 @@ public class AccessChatHistory {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 String serializedKey = dataSnapshot.getValue(String.class);
                 if (serializedKey != null) {
-                    try {
-                        // Decode the Base64 encoded key string to bytes
-                        byte[] bytes = new byte[0];
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                            bytes = Base64.getDecoder().decode(serializedKey);
-                        }
-                        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-                        ObjectInputStream in = new ObjectInputStream(bis);
-                        SecretKey deserializedKey = (SecretKey) in.readObject();
-                        callback.onSuccess(deserializedKey);
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                        callback.onError("Failed to deserialize key: " + e.getMessage());
+                    // Decode the Base64 encoded key string to bytes
+                    byte[] keyBytes = new byte[0];
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                        keyBytes = Base64.getDecoder().decode(serializedKey);
                     }
+
+                    // Reconstruct the key using SecretKeySpec
+                    SecretKey deserializedKey = new SecretKeySpec(keyBytes, "AES");
+                    callback.onSuccess(deserializedKey);
                 } else {
                     callback.onError("Serialized key is null");
                 }
