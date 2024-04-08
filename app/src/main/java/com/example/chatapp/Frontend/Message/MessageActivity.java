@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -54,7 +55,7 @@ public class MessageActivity extends AppCompatActivity {
         System.out.println(senderName);
         System.out.println(senderID);
         System.out.println("+_=-=--=-=-=-=-=-=-=-=");
-        // Getting previous messages for the chat
+//         Getting previous messages for the chat
 //        try {
 //            loadPreviousMessages("43a5d34b-2410-4b6c-a847-ef5fd467ee13","f759d772-9e2c-4a3e-bd8b-1d33a66e2d16");
 //        } catch (InterruptedException e) {
@@ -65,6 +66,7 @@ public class MessageActivity extends AppCompatActivity {
         messageAdapter = new MessageAdapter(messageList);
         messagesRecyclerView.setAdapter(messageAdapter);
         messagesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        fetchMessages("43a5d34b-2410-4b6c-a847-ef5fd467ee13","f759d772-9e2c-4a3e-bd8b-1d33a66e2d16");
         sendButton.setOnClickListener(v -> {
             String message = messageEditText.getText().toString();
             System.out.println(message);
@@ -97,7 +99,7 @@ public class MessageActivity extends AppCompatActivity {
     private void loadPreviousMessages(String senderId, String receiverId) throws InterruptedException {
         // Dummy data, replace with actual message loading logic
 
-        AccessChatHistory accessChatHistory = new AccessChatHistory();
+//        AccessChatHistory accessChatHistory = new AccessChatHistory();
 //        accessChatHistory.getRawMessages(senderID,receiverID,);
 //        String[][] strings =  {
 //                {"Jake","Hello"},
@@ -157,6 +159,29 @@ public class MessageActivity extends AppCompatActivity {
         System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++");
 //        messageAdapter.notifyItemInserted(messageList.size() - 1);
 //        messagesRecyclerView.scrollToPosition(messageList.size() - 1); // Scroll to bottom
+    }
+
+    private void fetchMessages(String senderId, String receiverId) {
+        // Assuming senderId and receiverId are available
+//        UUID senderId = UUID.randomUUID(); // Placeholder
+//        UUID receiverId = UUID.randomUUID(); // Placeholder
+        AccessChatHistory chatHistory = new AccessChatHistory();
+        new AccessChatHistory().getRawMessages(UUID.fromString("43a5d34b-2410-4b6c-a847-ef5fd467ee13"), UUID.fromString("f759d772-9e2c-4a3e-bd8b-1d33a66e2d16"), new AccessChatHistory.RawMessagesListener() {
+            @Override
+            public void onRawMessagesReceived(List<String> messages) {
+                System.out.println(messages);
+                System.out.println("**********************************************************");
+                runOnUiThread(() -> messageAdapter.setMessages(messages));
+            }
+
+            @Override
+            public void onError(String error) {
+                runOnUiThread(() -> Toast.makeText(MessageActivity.this, "Error: " + error, Toast.LENGTH_SHORT).show());
+            }
+        });
+
+
+
     }
 
 
