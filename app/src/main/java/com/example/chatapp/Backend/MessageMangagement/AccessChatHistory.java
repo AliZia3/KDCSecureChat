@@ -144,19 +144,24 @@ public class AccessChatHistory {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         List<String> messages = new ArrayList<>();
-                        for (DataSnapshot messageSnapshot : dataSnapshot.child("messages").getChildren()) {
-                            String serializedChatMessage = messageSnapshot.getValue(String.class);
-                            if (serializedChatMessage != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                                byte[] serializedChatMessageBytes = Base64.getDecoder().decode(serializedChatMessage);
-                                try {
-                                    ByteArrayInputStream bis = new ByteArrayInputStream(serializedChatMessageBytes);
-                                    ObjectInputStream ois = new ObjectInputStream(bis);
+                        DataSnapshot messagesSnapshot = dataSnapshot.child("messages");
+
+                        if (!messagesSnapshot.exists()) {
+                            listener.onError("No messages found");
+                            return;
+                        }
+
+                        for (DataSnapshot messageSnapshot : messagesSnapshot.getChildren()) {
+                            String base64EncodedMessage = messageSnapshot.getValue(String.class);
+
+                            if (base64EncodedMessage != null && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                byte[] decodedBytes = Base64.getDecoder().decode(base64EncodedMessage);
+                                ByteArrayInputStream bis = new ByteArrayInputStream(decodedBytes);
+
+                                try (ObjectInputStream ois = new ObjectInputStream(bis)) {
                                     ChatMessage chatMessage = (ChatMessage) ois.readObject();
-
-                                    // Do what you need with chatMessage here, e.g., get its text content
-                                    // Let's say your ChatMessage class has a getText() method to get the message text
-                                    messages.add(Arrays.toString(chatMessage.getMessage()));
-
+                                    // Assuming ChatMessage class has a method to get the text content
+                                    messages.add(chatMessage.getMessageId().toString());
                                 } catch (IOException | ClassNotFoundException e) {
                                     e.printStackTrace();
                                     listener.onError("Failed to deserialize message: " + e.getMessage());
@@ -164,6 +169,7 @@ public class AccessChatHistory {
                                 }
                             }
                         }
+
                         listener.onRawMessagesReceived(messages);
                     }
 
