@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 
 public class SendTextMessage {
     private final DatabaseReference chatsRef = FirebaseDatabase.getInstance().getReference("Chats");
@@ -40,28 +41,51 @@ public class SendTextMessage {
 
         SymmetricKeyCryptoSystemManager encrypt = new SymmetricKeyCryptoSystemManager();
 
-        // Create a new ChatMessage object
-        ChatMessage chatMessage = new ChatMessage(messageId, senderId, encrypt.encrypt(message, accessChatHistory.fetchAndDecryptMessages(chatId)));
+        accessChatHistory.fetchAndDecryptMessages(chatId, new AccessChatHistory.SecretKeyCallback() {
+            @Override
+            public void onSuccess(SecretKey key) {
+                // This block executes when the key is successfully fetched and decrypted.
+                try {
+                    // Now that we have the key, encrypt the message.
+                    byte[] encryptedMessage = encrypt.encrypt(message, key);
 
-        // Serialization for ChatMessage object
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    // Create the ChatMessage instance with the encrypted message.
+                    ChatMessage chatMessage = new ChatMessage(messageId, senderId, encryptedMessage);
 
-        try {
-            ObjectOutputStream out = new ObjectOutputStream(bos);
-            out.writeObject(chatMessage);
-            out.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+                    // Serialization for ChatMessage object
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
 
-        String serializedChatMessage = bos.toString();
+                    try {
+                        ObjectOutputStream out = new ObjectOutputStream(bos);
+                        out.writeObject(chatMessage);
+                        out.flush();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
-        // Push this message to the correct chat in Firebase
-        chatsRef.child(chatId[0]).child("messages").push().setValue(serializedChatMessage);
+                    String serializedChatMessage = bos.toString();
 
-        // Push senderId to its respective message
-        chatsRef.child(chatId[0]).child("messages").child(serializedChatMessage).push().setValue(senderId);
-        //TODO: update chat metadata (sender, receiver, etc.) here as well (maybe)
+                    // Push this message to the correct chat in Firebase
+                    chatsRef.child(chatId[0]).child("messages").push().setValue(serializedChatMessage);
+
+                    // Push senderId to its respective message
+                    chatsRef.child(chatId[0]).child("messages").child(serializedChatMessage).push().setValue(senderId);
+                    //TODO: update chat metadata (sender, receiver, etc.) here as well (maybe)
+                } catch (Exception e) {
+                    // Handle any encryption errors
+                    e.printStackTrace();
+                    // Consider notifying the user or logging the error.
+                }
+            }
+
+            @Override
+            public void onError(String error) {
+                // Handle the error case, e.g., key decryption failed.
+                // Notify the user or log the error as appropriate.
+                System.out.println("Failed to fetch and decrypt the secret key: " + error);
+            }
+        });
+
     }
 
 }

@@ -103,80 +103,87 @@ public class AccessChatHistory {
     // New simplified method to get just the messages as a list of strings
     public void getRawMessages(UUID senderId, UUID receiverId, final RawMessagesListener listener) {
         generateChatId generate = new generateChatId();
-
         String[] chatId = generate.generate(senderId, receiverId);
-        chatsRef.child(chatId[0]).child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
+
+        // First, fetch and decrypt the key
+        fetchAndDecryptMessages(chatId, new SecretKeyCallback() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                List<String> messages = new ArrayList<>();
-                for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                    // Assuming the messages are stored as Base64 encoded strings
-                    String encodedMessage = messageSnapshot.child("message").getValue(String.class);
-                    if (encodedMessage != null) {
-                        // Decode the Base64 encoded message
-                        byte[] decodedBytes = new byte[0];
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                            decodedBytes = Base64.getDecoder().decode(encodedMessage);
+            public void onSuccess(SecretKey key) {
+                // Key is successfully fetched and decrypted, now fetch messages
+                chatsRef.child(chatId[0]).child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<String> messages = new ArrayList<>();
+                        for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                            String encodedMessage = messageSnapshot.child("message").getValue(String.class);
+                            if (encodedMessage != null) {
+                                byte[] decodedBytes = new byte[0];
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                    decodedBytes = Base64.getDecoder().decode(encodedMessage);
+                                }
+                                SymmetricKeyCryptoSystemManager decrypt = new SymmetricKeyCryptoSystemManager();
+                                try {
+                                    messages.add(decrypt.decrypt(decodedBytes, key));
+                                } catch (InvalidAlgorithmParameterException | InvalidKeyException |
+                                         BadPaddingException | NoSuchAlgorithmException |
+                                         IllegalBlockSizeException | NoSuchPaddingException e) {
+                                    e.printStackTrace();
+                                    listener.onError("Failed to decrypt message: " + e.getMessage());
+                                    return;
+                                }
+                            }
                         }
-
-                        SymmetricKeyCryptoSystemManager decrypt = new SymmetricKeyCryptoSystemManager();
-                        try {
-                            // Assuming decrypt method returns a String after decryption
-                            messages.add(decrypt.decrypt(decodedBytes, fetchAndDecryptMessages(chatId)));
-                        } catch (InvalidAlgorithmParameterException | InvalidKeyException |
-                                 BadPaddingException | NoSuchAlgorithmException |
-                                 IllegalBlockSizeException | NoSuchPaddingException e) {
-                            e.printStackTrace();
-                            listener.onError("Failed to decrypt message: " + e.getMessage());
-                            return;
-                        }
+                        listener.onRawMessagesReceived(messages);
                     }
-                }
-                listener.onRawMessagesReceived(messages); // Pass the list of messages to the listener
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        listener.onError("Failed to read chat messages: " + databaseError.getMessage());
+                    }
+                });
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                listener.onError("Failed to read chat messages: " + databaseError.getMessage()); // Notify listener of error
+            public void onError(String error) {
+                listener.onError(error);
             }
         });
     }
 
-    public SecretKey fetchAndDecryptMessages(String[] chatId) {
-        final String[] serializedKey = new String[1];
-        final SecretKey[] finalDeserializedKey = new SecretKey[1];
+    public interface SecretKeyCallback {
+        void onSuccess(SecretKey key);
+        void onError(String error);
+    }
+
+    public void fetchAndDecryptMessages(String[] chatId, final SecretKeyCallback callback) {
         chatsRef.child(chatId[0]).child("key").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                serializedKey[0] = dataSnapshot.getValue(String.class);
-
-                // Assume serializedKey is your serialized key in String format
-                assert serializedKey[0] != null;
-                byte[] bytes = serializedKey[0].getBytes();
-
-                // Deserialize
-                ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-                SecretKey deserializedKey = null;
-                try {
-                    ObjectInputStream in = new ObjectInputStream(bis);
-                    deserializedKey = (SecretKey) in.readObject();
-
-                    // Use deserializedKey as needed
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
+                String serializedKey = dataSnapshot.getValue(String.class);
+                if (serializedKey != null) {
+                    try {
+                        byte[] bytes = new byte[0];
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                            bytes = Base64.getDecoder().decode(serializedKey);
+                        }
+                        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+                        ObjectInputStream in = new ObjectInputStream(bis);
+                        SecretKey deserializedKey = (SecretKey) in.readObject();
+                        callback.onSuccess(deserializedKey);
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                        callback.onError("Failed to deserialize key: " + e.getMessage());
+                    }
+                } else {
+                    callback.onError("Serialized key is null");
                 }
-
-                finalDeserializedKey[0] = deserializedKey;
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                System.out.println("Failed to read chat messages: " + databaseError.getMessage()); // Print error
+                callback.onError("Failed to read chat messages: " + databaseError.getMessage());
             }
         });
-        return finalDeserializedKey[0];
     }
 }
 
