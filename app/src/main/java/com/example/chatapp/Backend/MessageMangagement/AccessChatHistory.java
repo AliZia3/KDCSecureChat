@@ -10,6 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -162,10 +163,7 @@ public class AccessChatHistory {
                 String serializedKey = dataSnapshot.getValue(String.class);
                 if (serializedKey != null) {
                     try {
-                        byte[] bytes = new byte[0];
-                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                            bytes = Base64.getDecoder().decode(serializedKey);
-                        }
+                        byte[] bytes = serializedKey.getBytes(StandardCharsets.ISO_8859_1);
                         ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                         ObjectInputStream in = new ObjectInputStream(bis);
                         SecretKey deserializedKey = (SecretKey) in.readObject();
