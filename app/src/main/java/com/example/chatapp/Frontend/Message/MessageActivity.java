@@ -87,21 +87,21 @@ public class MessageActivity extends AppCompatActivity {
 
     private void loadPreviousMessages(String senderID, String receiverID) {
         // Dummy data, replace with actual message loading logic
-        String[][] strings =  {
-                {"Jake","Hello"},
-                {"Ali","Hello"},
-                {"Will","Hello"},
-                {"Changhao","Hello"},
-                {"Matthew","Hello"},
-        };
-
-        for (String[] s:strings){
-            System.out.println(s[0]);
-            System.out.println(receiverID);
-            if (s[0].equals(receiverID)){
-                messageList.add(s[1]);
-            }
-        }
+//        String[][] strings =  {
+//                {"Jake","Hello"},
+//                {"Ali","Hello"},
+//                {"Will","Hello"},
+//                {"Changhao","Hello"},
+//                {"Matthew","Hello"},
+//        };
+//
+//        for (String[] s:strings){
+//            System.out.println(s[0]);
+//            System.out.println(receiverID);
+//            if (s[0].equals(receiverID)){
+//                messageList.add(s[1]);
+//            }
+//        }
 
     }
 
