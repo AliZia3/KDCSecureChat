@@ -70,26 +70,53 @@ public class AccessChatHistory {
 
     public void accessMessages(UUID senderId, UUID receiverId, final MessagesListener listener) {
         generateChatId generate = new generateChatId();
-
         String[] chatId = generate.generate(senderId, receiverId);
 
-        chatsRef.child(chatId[0]).child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
+        // First, fetch and decrypt the key
+        fetchAndDecryptMessages(chatId, new SecretKeyCallback() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<SimpleChatMessage> simpleMessages = new ArrayList<>();
-                for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
-                    ChatMessage message = messageSnapshot.getValue(ChatMessage.class);
-                    if (message != null) {
-                        SimpleChatMessage simpleMessage = new SimpleChatMessage(message.getSenderId().toString(), message.getMessage());
-                        simpleMessages.add(simpleMessage);
+            public void onSuccess(SecretKey key) {
+                // Key is successfully fetched and decrypted, now fetch messages
+                chatsRef.child(chatId[0]).child("messages").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<SimpleChatMessage> simpleMessages = new ArrayList<>();
+                        for (DataSnapshot messageSnapshot : dataSnapshot.getChildren()) {
+                            String encodedMessage = messageSnapshot.child("message").getValue(String.class);
+                            if (encodedMessage != null) {
+                                byte[] decodedBytes = new byte[0];
+                                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                                    decodedBytes = Base64.getDecoder().decode(encodedMessage);
+                                }
+                                SymmetricKeyCryptoSystemManager decrypt = new SymmetricKeyCryptoSystemManager();
+                                try {
+                                    // Decrypt the message using the key
+                                    String decryptedMessage = decrypt.decrypt(decodedBytes, key);
+                                    // Assuming the senderId is stored as a String in the ChatMessage object
+                                    SimpleChatMessage simpleMessage = new SimpleChatMessage(messageSnapshot.child("senderId").getValue(String.class), decryptedMessage.getBytes());
+                                    simpleMessages.add(simpleMessage);
+                                } catch (InvalidAlgorithmParameterException | InvalidKeyException |
+                                         BadPaddingException | NoSuchAlgorithmException |
+                                         IllegalBlockSizeException | NoSuchPaddingException e) {
+                                    e.printStackTrace();
+                                    listener.onError("Failed to decrypt message: " + e.getMessage());
+                                    return;
+                                }
+                            }
+                        }
+                        listener.onAccessMessagesReceived(simpleMessages); // Notify listener
                     }
-                }
-                listener.onAccessMessagesReceived(simpleMessages); // Notify listener
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        listener.onError("Failed to read chat messages: " + databaseError.getMessage()); // Notify listener of error
+                    }
+                });
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                listener.onError("Failed to read chat messages: " + databaseError.getMessage()); // Notify listener of error
+            public void onError(String error) {
+                listener.onError(error);
             }
         });
     }
